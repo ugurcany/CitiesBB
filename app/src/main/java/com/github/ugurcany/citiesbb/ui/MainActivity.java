@@ -1,15 +1,21 @@
 package com.github.ugurcany.citiesbb.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.github.ugurcany.citiesbb.R;
 import com.github.ugurcany.citiesbb.databinding.ActivityMainBinding;
 import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.model.data.Coordinates;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements MainContract.IView {
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity
 
         binding.recyclerViewCities.setHasFixedSize(true);
 
-        adapter = new CityRecyclerAdapter(new City[0]);
+        adapter = new CityRecyclerAdapter(this);
         binding.recyclerViewCities.setAdapter(adapter);
     }
 
@@ -46,6 +52,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void updateCities(City[] cities) {
         adapter.updateData(cities);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int position = binding.recyclerViewCities.getChildLayoutPosition(view);
+        City city = adapter.getCityAt(position);
+
+        startMapApp(city.getCoord());
+    }
+
+    private void startMapApp(Coordinates coordinates) {
+        String uri = String.format(Locale.ENGLISH, "geo:%f,%f",
+                coordinates.getLat(), coordinates.getLon());
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(intent);
     }
 
 }
