@@ -1,4 +1,4 @@
-package com.github.ugurcany.citiesbb.ui;
+package com.github.ugurcany.citiesbb.ui.cities;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

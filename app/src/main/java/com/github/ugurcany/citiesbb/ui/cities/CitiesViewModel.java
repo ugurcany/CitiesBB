@@ -1,4 +1,4 @@
-package com.github.ugurcany.citiesbb.ui;
+package com.github.ugurcany.citiesbb.ui.cities;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
@@ -6,22 +6,23 @@ import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.text.TextUtils;
 
-import com.github.ugurcany.citiesbb.model.CityModel;
+import com.github.ugurcany.citiesbb.TheApp;
 import com.github.ugurcany.citiesbb.model.ICityModel;
 import com.github.ugurcany.citiesbb.model.data.City;
 
-public class MainViewModel implements MainContract.IViewModel {
+public class CitiesViewModel implements CitiesContract.IViewModel {
 
     public ObservableField<String> searchInput = new ObservableField<>("");
     public ObservableField<Boolean> noResultMsgVisible = new ObservableField<>(false);
 
-    private MainContract.IView view;
+    private CitiesContract.IView view;
     private ICityModel cityModel;
 
-    MainViewModel(MainContract.IView view, Lifecycle lifecycle) {
+    CitiesViewModel(CitiesContract.IView view, Lifecycle lifecycle, String initialSearchInput) {
         this.view = view;
-        this.cityModel = new CityModel(view.getContext());
+        this.cityModel = TheApp.modelProvider().cityModel();
 
+        this.searchInput.set(initialSearchInput);
         this.searchInput.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -32,10 +33,9 @@ public class MainViewModel implements MainContract.IViewModel {
         lifecycle.addObserver(this);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void onViewCreated() {
-        //INITIALLY NO FILTER APPLIED
-        onSearchInputChanged("");
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onViewStarted() {
+        onSearchInputChanged(searchInput.get());
     }
 
     private void onSearchInputChanged(String input) {

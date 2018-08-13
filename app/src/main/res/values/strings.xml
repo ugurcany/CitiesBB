@@ -2,6 +2,9 @@
 
     <string name="app_name">CitiesBB</string>
 
+    <string name="page_cities">Cities</string>
+    <string name="page_map">Map</string>
+
     <string name="hint_search">Search</string>
     <string name="message_no_city">No city found!</string>
 

@@ -1,72 +1,112 @@
 package com.github.ugurcany.citiesbb.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
 
 import com.github.ugurcany.citiesbb.R;
 import com.github.ugurcany.citiesbb.databinding.ActivityMainBinding;
-import com.github.ugurcany.citiesbb.model.data.City;
 import com.github.ugurcany.citiesbb.model.data.Coordinates;
-
-import java.util.Locale;
+import com.github.ugurcany.citiesbb.ui.cities.CitiesFragment;
+import com.github.ugurcany.citiesbb.ui.map.MapFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements MainContract.IView {
+        implements IMainActivity {
 
     private ActivityMainBinding binding;
-    private CityRecyclerAdapter adapter;
+
+    private CitiesFragment citiesFragment;
+    private MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setViewModel(new MainViewModel(this, getLifecycle()));
 
-        initRecyclerView();
-    }
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
 
-    private void initRecyclerView() {
-        binding.recyclerViewCities.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
-        binding.recyclerViewCities.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
+        if (savedInstanceState != null) {
+            citiesFragment = (CitiesFragment) getSupportFragmentManager().getFragment(
+                    savedInstanceState, MainConstants.FRAGMENT_KEY_CITIES);
+            if (citiesFragment == null) {
+                citiesFragment = new CitiesFragment();
+            }
 
-        binding.recyclerViewCities.setHasFixedSize(true);
+            mapFragment = (MapFragment) getSupportFragmentManager().getFragment(
+                    savedInstanceState, MainConstants.FRAGMENT_KEY_MAP);
+            if (mapFragment == null) {
+                mapFragment = new MapFragment();
+            }
 
-        adapter = new CityRecyclerAdapter(this);
-        binding.recyclerViewCities.setAdapter(adapter);
+            onBackStackChanged();
+        } else {
+            mapFragment = new MapFragment();
+            citiesFragment = new CitiesFragment();
+
+            showCitiesFragment();
+        }
     }
 
     @Override
-    public Context getContext() {
-        return this;
+    public void showCitiesFragment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                .beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, citiesFragment, "cities");
+        fragmentTransaction.commit();
+
+        onBackStackChanged();
     }
 
     @Override
-    public void updateCities(City[] cities) {
-        adapter.updateData(cities);
+    public void showMapFragment(Coordinates coordinates) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                .beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MainConstants.BUNDLE_KEY_COORDINATES, coordinates);
+        mapFragment.setArguments(bundle);
+
+        fragmentTransaction.replace(R.id.container_fragment, mapFragment, "map");
+        fragmentTransaction.addToBackStack(getString(R.string.page_map));
+        fragmentTransaction.commit();
     }
 
     @Override
-    public void onClick(View view) {
-        int position = binding.recyclerViewCities.getChildLayoutPosition(view);
-        City city = adapter.getCityAt(position);
-
-        startMapApp(city.getCoord());
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
-    private void startMapApp(Coordinates coordinates) {
-        String uri = String.format(Locale.ENGLISH, "geo:%f,%f",
-                coordinates.getLat(), coordinates.getLon());
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        startActivity(intent);
+    @Override
+    public void onBackStackChanged() {
+        //HOME FRAGMENT = CITIES
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setTitle(R.string.page_cities);
+        } else {
+            //GET TOP BACKSTACK ENTRY
+            FragmentManager.BackStackEntry topBackStackEntry =
+                    getSupportFragmentManager().getBackStackEntryAt(
+                            getSupportFragmentManager().getBackStackEntryCount() - 1);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(topBackStackEntry.getName());
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (citiesFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, MainConstants.FRAGMENT_KEY_CITIES,
+                    citiesFragment);
+
+        } else if (mapFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, MainConstants.FRAGMENT_KEY_MAP,
+                    mapFragment);
+        }
     }
 
 }

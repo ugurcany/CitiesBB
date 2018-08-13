@@ -1,6 +1,8 @@
 package com.github.ugurcany.citiesbb.model.data;
 
-public class Coordinates {
+import java.io.Serializable;
+
+public class Coordinates implements Serializable {
 
     private double lon;
     private double lat;
