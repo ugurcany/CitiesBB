@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.ugurcany.citiesbb.R;
 import com.github.ugurcany.citiesbb.databinding.ActivityMainBinding;
-import com.github.ugurcany.citiesbb.model.data.Coordinates;
+import com.github.ugurcany.citiesbb.model.data.City;
 import com.github.ugurcany.citiesbb.ui.cities.CitiesFragment;
 import com.github.ugurcany.citiesbb.ui.map.MapFragment;
 
@@ -58,24 +58,23 @@ public class MainActivity extends AppCompatActivity
 
         fragmentTransaction.replace(R.id.container_fragment,
                 fragment, MainConstants.FRAGMENT_KEY_CITIES);
-        fragmentTransaction.setPrimaryNavigationFragment(fragment);
         fragmentTransaction.commit();
     }
 
     @Override
-    public void showMapFragment(Coordinates coordinates) {
+    public void showMapFragment(City city) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
 
         Fragment fragment = fragments.get(MainConstants.FRAGMENT_KEY_MAP);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(MainConstants.BUNDLE_KEY_COORDINATES, coordinates);
+        bundle.putSerializable(MainConstants.BUNDLE_KEY_COORDINATES, city.getCoord());
         fragment.setArguments(bundle);
 
         fragmentTransaction.replace(R.id.container_fragment,
                 fragment, MainConstants.FRAGMENT_KEY_MAP);
-        fragmentTransaction.addToBackStack(getString(R.string.page_map));
+        fragmentTransaction.addToBackStack(city.getDisplayName());
         fragmentTransaction.commit();
     }
 
@@ -91,15 +90,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setToolbar() {
-        //HOME FRAGMENT = CITIES
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setTitle(R.string.page_cities);
+            getSupportActionBar().setTitle(R.string.app_name);
         } else {
             //GET TOP BACKSTACK ENTRY
             FragmentManager.BackStackEntry topBackStackEntry =
                     getSupportFragmentManager().getBackStackEntryAt(
                             getSupportFragmentManager().getBackStackEntryCount() - 1);
+
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(topBackStackEntry.getName());
         }

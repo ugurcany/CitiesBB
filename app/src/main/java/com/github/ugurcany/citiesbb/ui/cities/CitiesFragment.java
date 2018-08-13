@@ -62,7 +62,7 @@ public class CitiesFragment extends Fragment
         int position = binding.recyclerViewCities.getChildLayoutPosition(view);
         City city = adapter.getCityAt(position);
 
-        ((IMainActivity) getActivity()).showMapFragment(city.getCoord());
+        ((IMainActivity) getActivity()).showMapFragment(city);
     }
 
     /*private void startMapApp(Coordinates coordinates) {
