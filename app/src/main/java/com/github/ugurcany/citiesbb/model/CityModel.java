@@ -44,8 +44,7 @@ public class CityModel implements ICityModel {
             Gson gson = new Gson();
             Reader reader = new InputStreamReader(ims);
 
-            List<City> cityList = gson.fromJson(reader, new TypeToken<List<City>>() {
-            }.getType());
+            List<City> cityList = gson.fromJson(reader, new TypeToken<List<City>>(){}.getType());
             for (City city : cityList) {
                 cityMap.put(city.getDisplayName(), city);
             }
