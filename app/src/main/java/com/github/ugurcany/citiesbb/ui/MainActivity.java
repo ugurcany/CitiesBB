@@ -2,6 +2,7 @@ package com.github.ugurcany.citiesbb.ui;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +13,14 @@ import com.github.ugurcany.citiesbb.model.data.Coordinates;
 import com.github.ugurcany.citiesbb.ui.cities.CitiesFragment;
 import com.github.ugurcany.citiesbb.ui.map.MapFragment;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity
         implements IMainActivity {
 
     private ActivityMainBinding binding;
 
-    private CitiesFragment citiesFragment;
-    private MapFragment mapFragment;
+    private HashMap<String, Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,36 +29,37 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
+        fragments = new HashMap<>();
+        fragments.put(MainConstants.FRAGMENT_KEY_CITIES, new CitiesFragment());
+        fragments.put(MainConstants.FRAGMENT_KEY_MAP, new MapFragment());
+
         if (savedInstanceState != null) {
-            citiesFragment = (CitiesFragment) getSupportFragmentManager().getFragment(
-                    savedInstanceState, MainConstants.FRAGMENT_KEY_CITIES);
-            if (citiesFragment == null) {
-                citiesFragment = new CitiesFragment();
-            }
+            for (String fragmentKey : fragments.keySet()) {
+                Fragment fragment = getSupportFragmentManager().getFragment(
+                        savedInstanceState, fragmentKey);
 
-            mapFragment = (MapFragment) getSupportFragmentManager().getFragment(
-                    savedInstanceState, MainConstants.FRAGMENT_KEY_MAP);
-            if (mapFragment == null) {
-                mapFragment = new MapFragment();
+                if (fragment != null) {
+                    fragments.put(fragmentKey, fragment);
+                }
             }
-
-            onBackStackChanged();
         } else {
-            mapFragment = new MapFragment();
-            citiesFragment = new CitiesFragment();
-
             showCitiesFragment();
         }
+
+        setToolbar();
     }
 
     @Override
     public void showCitiesFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment, citiesFragment, "cities");
-        fragmentTransaction.commit();
 
-        onBackStackChanged();
+        Fragment fragment = fragments.get(MainConstants.FRAGMENT_KEY_CITIES);
+
+        fragmentTransaction.replace(R.id.container_fragment,
+                fragment, MainConstants.FRAGMENT_KEY_CITIES);
+        fragmentTransaction.setPrimaryNavigationFragment(fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -64,11 +67,14 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
 
+        Fragment fragment = fragments.get(MainConstants.FRAGMENT_KEY_MAP);
+
         Bundle bundle = new Bundle();
         bundle.putSerializable(MainConstants.BUNDLE_KEY_COORDINATES, coordinates);
-        mapFragment.setArguments(bundle);
+        fragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.container_fragment, mapFragment, "map");
+        fragmentTransaction.replace(R.id.container_fragment,
+                fragment, MainConstants.FRAGMENT_KEY_MAP);
         fragmentTransaction.addToBackStack(getString(R.string.page_map));
         fragmentTransaction.commit();
     }
@@ -81,6 +87,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackStackChanged() {
+        setToolbar();
+    }
+
+    private void setToolbar() {
         //HOME FRAGMENT = CITIES
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -99,13 +109,12 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (citiesFragment.isAdded()) {
-            getSupportFragmentManager().putFragment(outState, MainConstants.FRAGMENT_KEY_CITIES,
-                    citiesFragment);
+        for (String fragmentKey : fragments.keySet()) {
+            Fragment fragment = fragments.get(fragmentKey);
 
-        } else if (mapFragment.isAdded()) {
-            getSupportFragmentManager().putFragment(outState, MainConstants.FRAGMENT_KEY_MAP,
-                    mapFragment);
+            if (fragment.isAdded()) {
+                getSupportFragmentManager().putFragment(outState, fragmentKey, fragment);
+            }
         }
     }
 
