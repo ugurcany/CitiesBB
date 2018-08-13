@@ -19,6 +19,13 @@ public class CityModel implements ICityModel {
     private final static String FILE_CITIES = "data/cities.json";
 
     private Context context;
+
+    /*
+     * TREE-BASED NAVIGABLE MAP
+     * -> HOLDS ENTRIES IN SORTED KEY ORDER
+     * -> PROVIDES SUBMAP(...) FUNCTION TO GET A PORTION OF MAP
+     * -> CREATING SUBMAP TAKES O(1) & ACCESS TAKES O(LOGN)
+     */
     private TreeMap<String, City> cityMap;
 
     public CityModel(Context context) {

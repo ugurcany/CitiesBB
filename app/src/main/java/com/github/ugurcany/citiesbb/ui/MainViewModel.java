@@ -22,14 +22,14 @@ public class MainViewModel implements MainContract.IViewModel {
         this.view = view;
         this.cityModel = new CityModel(view.getContext());
 
-        lifecycle.addObserver(this);
-
         this.searchInput.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 onSearchInputChanged(searchInput.get());
             }
         });
+
+        lifecycle.addObserver(this);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
