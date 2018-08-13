@@ -1,0 +1,23 @@
+def app = [:]
+app.id = "com.github.ugurcany.citiesbb"
+app.version_code = 1
+app.version_name = "1.0"
+ext.app = app
+
+def sdk_versions = [:]
+sdk_versions.min_sdk = 16
+sdk_versions.target_sdk = 27
+sdk_versions.compile_sdk = 27
+ext.sdk_versions = sdk_versions
+
+def dep_versions = [:]
+dep_versions.gradle = "3.1.4"
+dep_versions.support = "27.1.1"
+ext.dep_versions = dep_versions
+
+def static addRepos(RepositoryHandler handler) {
+    handler.google()
+    handler.jcenter()
+}
+
+ext.addRepos = this.&addRepos
