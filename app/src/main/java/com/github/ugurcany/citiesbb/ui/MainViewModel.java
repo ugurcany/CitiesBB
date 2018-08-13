@@ -13,6 +13,7 @@ import com.github.ugurcany.citiesbb.model.data.City;
 public class MainViewModel implements MainContract.IViewModel {
 
     public ObservableField<String> searchInput = new ObservableField<>("");
+    public ObservableField<Boolean> noResultMsgVisible = new ObservableField<>(false);
 
     private MainContract.IView view;
     private ICityModel cityModel;
@@ -45,6 +46,10 @@ public class MainViewModel implements MainContract.IViewModel {
             cities = cityModel.getCitiesStartingWith(input);
         }
 
+        //SHOW NO RESULT MSG?
+        noResultMsgVisible.set(cities == null || cities.length == 0);
+
+        //UPDATE VIEW
         view.updateCities(cities);
     }
 
