@@ -7,8 +7,8 @@ import android.databinding.ObservableField;
 import android.text.TextUtils;
 
 import com.github.ugurcany.citiesbb.TheApp;
-import com.github.ugurcany.citiesbb.model.ICityModel;
-import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.model.city.ICityModel;
+import com.github.ugurcany.citiesbb.data.City;
 
 public class CitiesViewModel implements CitiesContract.IViewModel {
 

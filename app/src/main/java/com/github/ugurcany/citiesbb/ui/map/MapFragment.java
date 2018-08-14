@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.github.ugurcany.citiesbb.R;
 import com.github.ugurcany.citiesbb.databinding.FragmentMapBinding;
-import com.github.ugurcany.citiesbb.model.data.Coordinates;
-import com.github.ugurcany.citiesbb.ui.MainConstants;
+import com.github.ugurcany.citiesbb.data.Coordinates;
+import com.github.ugurcany.citiesbb.ui.activity.MainConstants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,6 +38,7 @@ public class MapFragment extends Fragment
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //ZOOM TO GIVEN COORDINATES
         Coordinates coordinates =
                 (Coordinates) getArguments().getSerializable(MainConstants.BUNDLE_KEY_COORDINATES);
         LatLng latLng = new LatLng(coordinates.getLat(), coordinates.getLon());

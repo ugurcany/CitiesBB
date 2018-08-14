@@ -10,6 +10,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.github.ugurcany.citiesbb.R;
+import com.github.ugurcany.citiesbb.ui.activity.MainActivity;
 import com.github.ugurcany.citiesbb.ui.util.RecyclerViewItemCountAssertion;
 
 import org.hamcrest.CoreMatchers;

@@ -1,9 +1,9 @@
-package com.github.ugurcany.citiesbb.model;
+package com.github.ugurcany.citiesbb.model.city;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.data.City;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,6 +25,7 @@ public class CityModel implements ICityModel {
      * -> HOLDS ENTRIES IN SORTED KEY ORDER
      * -> PROVIDES SUBMAP(...) FUNCTION TO GET A PORTION OF MAP
      * -> CREATING SUBMAP TAKES O(1) & ACCESS TAKES O(LOGN)
+     * -> THUS, SUITABLE FOR SORTED AND FILTERABLE (BY A STRING PREFIX) LISTS
      */
     private TreeMap<String, City> cityMap;
 
@@ -44,9 +45,10 @@ public class CityModel implements ICityModel {
             Gson gson = new Gson();
             Reader reader = new InputStreamReader(ims);
 
-            List<City> cityList = gson.fromJson(reader, new TypeToken<List<City>>(){}.getType());
+            List<City> cityList = gson.fromJson(reader, new TypeToken<List<City>>() {
+            }.getType());
             for (City city : cityList) {
-                cityMap.put(city.getDisplayName(), city);
+                cityMap.put(city.getDisplayName().toLowerCase(), city);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,6 +70,8 @@ public class CityModel implements ICityModel {
 
     @Override
     public City[] getCitiesStartingWith(String prefix) {
+        prefix = prefix.toLowerCase();
+
         return cityMap.subMap(prefix, prefix + Character.MAX_VALUE)
                 .values().toArray(new City[0]);
     }
