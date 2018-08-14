@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">CitiesBB</string>
+
+    <string name="hint_search">Search</string>
+    <string name="message_no_city">No city found!</string>
+
+</resources>

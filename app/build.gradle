@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion sdk_versions.compile_sdk
+
+    defaultConfig {
+        applicationId app.id
+        versionCode app.version_code
+        versionName app.version_name
+
+        minSdkVersion sdk_versions.min_sdk
+        targetSdkVersion sdk_versions.target_sdk
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    sourceSets {
+        test.resources.srcDirs += ['src/test/resources']
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //SUPPORT LIBS
+    implementation "com.android.support:appcompat-v7:$dep_versions.support"
+    implementation "com.android.support:recyclerview-v7:$dep_versions.support"
+    implementation "com.android.support:support-media-compat:$dep_versions.support"
+    implementation "com.android.support:support-v4:$dep_versions.support"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
+    //GSON
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    //MAPS
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+
+    //TESTING
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.7.22'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+}
