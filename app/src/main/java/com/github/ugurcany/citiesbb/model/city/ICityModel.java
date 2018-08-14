@@ -1,6 +1,6 @@
-package com.github.ugurcany.citiesbb.model;
+package com.github.ugurcany.citiesbb.model.city;
 
-import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.data.City;
 
 public interface ICityModel {
 

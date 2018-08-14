@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.github.ugurcany.citiesbb.R;
 import com.github.ugurcany.citiesbb.databinding.FragmentCitiesBinding;
-import com.github.ugurcany.citiesbb.model.data.City;
-import com.github.ugurcany.citiesbb.ui.IMainActivity;
+import com.github.ugurcany.citiesbb.data.City;
+import com.github.ugurcany.citiesbb.ui.activity.IMainActivity;
 
 public class CitiesFragment extends Fragment
         implements CitiesContract.IView {

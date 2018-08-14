@@ -3,7 +3,9 @@ package com.github.ugurcany.citiesbb.model;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.model.city.CityModel;
+import com.github.ugurcany.citiesbb.model.city.ICityModel;
+import com.github.ugurcany.citiesbb.data.City;
 
 import junit.framework.Assert;
 
@@ -55,8 +57,21 @@ public class CityModelTest {
     }
 
     @Test
-    public void testSubCitiesSize_valid() {
+    public void testSubCitiesSize_valid_upperCase() {
         String prefix = "H";
+
+        City[] someCities = cityModel.getCitiesStartingWith(prefix);
+        Assert.assertEquals(2, someCities.length);
+
+        Assert.assertEquals("Holubynka, UA",
+                someCities[0].getDisplayName());
+        Assert.assertEquals("Hurzuf, UA",
+                someCities[1].getDisplayName());
+    }
+
+    @Test
+    public void testSubCitiesSize_valid_lowerCase() {
+        String prefix = "h";
 
         City[] someCities = cityModel.getCitiesStartingWith(prefix);
         Assert.assertEquals(2, someCities.length);

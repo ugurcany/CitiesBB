@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.ugurcany.citiesbb.R;
-import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.data.City;
 
 public class CityRecyclerAdapter
         extends RecyclerView.Adapter<CityRecyclerAdapter.CityViewHolder> {

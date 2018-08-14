@@ -1,4 +1,4 @@
-package com.github.ugurcany.citiesbb.ui;
+package com.github.ugurcany.citiesbb.ui.activity;
 
 public class MainConstants {
 

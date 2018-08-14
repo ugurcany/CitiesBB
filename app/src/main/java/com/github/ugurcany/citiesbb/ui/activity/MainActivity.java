@@ -1,4 +1,4 @@
-package com.github.ugurcany.citiesbb.ui;
+package com.github.ugurcany.citiesbb.ui.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.ugurcany.citiesbb.R;
 import com.github.ugurcany.citiesbb.databinding.ActivityMainBinding;
-import com.github.ugurcany.citiesbb.model.data.City;
+import com.github.ugurcany.citiesbb.data.City;
 import com.github.ugurcany.citiesbb.ui.cities.CitiesFragment;
 import com.github.ugurcany.citiesbb.ui.map.MapFragment;
 

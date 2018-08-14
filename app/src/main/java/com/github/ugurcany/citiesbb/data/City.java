@@ -1,4 +1,4 @@
-package com.github.ugurcany.citiesbb.model.data;
+package com.github.ugurcany.citiesbb.data;
 
 public class City {
 
